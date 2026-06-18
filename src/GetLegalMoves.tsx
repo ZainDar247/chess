@@ -1,4 +1,5 @@
-import PawnMoves from "./legalMoves/PawnMoves";
+
+import { PawnMoves } from "./legalMoves/PawnMoves";
 import type { chessSquare } from "./types"
 
 function GetLegalMoves({board,square}:{board:chessSquare[][],square:chessSquare}) {
@@ -8,7 +9,7 @@ function GetLegalMoves({board,square}:{board:chessSquare[][],square:chessSquare}
     {
         moves = PawnMoves({board:board,square:square});
     }
-  return moves;
+  return moves.filter((item) => (item[0] <= 7 && item[0] >=0) && (item[1] <=7 && item[1] >=0));
 }
 
 export default GetLegalMoves

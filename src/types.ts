@@ -19,3 +19,6 @@ export const pieceNotations = {
     Q:"wQ",
     R:"wR",
 }
+
+
+export type promotionOptions = "none" | "bN" | "wN" | "bB" | "wB" | "bR" | "wR" | "bQ" | "wQ"
