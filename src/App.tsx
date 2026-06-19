@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { type chessSquare, type promotionOptions } from "./types";
-import { initialBoard } from "./HelperFunctions";
+import { initialBoard, isWhite } from "./HelperFunctions";
 import GetLegalMoves from "./GetLegalMoves";
 import { PawnPromotion } from "./legalMoves/PawnMoves";
 
 //TODO: pieces should not be allowed to move out of bounds
 function App() {
   const [board, setBoard] = useState<chessSquare[][]>(() => initialBoard());
+  const [gameHistory, setGameHistory] = useState<chessSquare[][][]>([board]);
+  const [position, setPosition] = useState<number>(0);
   const [selectedSquares, setSelectedSquares] = useState<chessSquare[]>([]);
   const [promotionSquares, SetPromotionSquares] = useState<chessSquare[]>([]);
   const [highLightedSquares, setHighLightedSquares] = useState<
@@ -27,10 +29,18 @@ function App() {
       } else {
         console.log(selectedSquares[0]);
         console.log(
-          GetLegalMoves({ board: board, square: selectedSquares[0] }),
+          GetLegalMoves({
+            gameHistory: gameHistory,
+            board: board,
+            square: selectedSquares[0],
+          }),
         );
         setHighLightedSquares(
-          GetLegalMoves({ board: board, square: selectedSquares[0] }),
+          GetLegalMoves({
+            gameHistory: gameHistory,
+            board: board,
+            square: selectedSquares[0],
+          }),
         );
       }
     } else if (selectedSquares?.length > 1) {
@@ -57,12 +67,30 @@ function App() {
           setOpen(true);
           SetPromotionSquares(selectedSquares);
         } else {
+          if (oldPosition.piece == "wP") {
+            if (
+              newPosition.row == oldPosition.row - 1 &&
+              (newPosition.col == oldPosition.col - 1 ||
+                newPosition.col == oldPosition.col + 1)
+            ) {
+              copy[newPosition.row + 1][newPosition.col].piece = null;
+            }
+          } else if (oldPosition.piece == "bP") {
+            if (
+              newPosition.row == oldPosition.row + 1 &&
+              (newPosition.col == oldPosition.col - 1 ||
+                newPosition.col == oldPosition.col + 1)
+            ) {
+              copy[newPosition.row - 1][newPosition.col].piece = null;
+            }
+          }
           copy[newPosition.row][newPosition.col].piece =
             copy[oldPosition.row][oldPosition.col].piece;
           copy[oldPosition.row][oldPosition.col].piece = null;
+          setBoard(copy);
+          setGameHistory((prev) => [...prev, copy]);
+          setPosition(position + 1);
         }
-
-        setBoard(copy);
       }
       setHighLightedSquares([]);
       setSelectedSquares([]);
@@ -89,7 +117,14 @@ function App() {
     );
 
     highLightedSquares.forEach(([r, c]) => {
-      copy[r][c].color = "orange";
+      const oldPosition = selectedSquares[0];
+      if (isWhite(oldPosition.piece) && copy[r][c].piece != null && !isWhite(copy[r][c].piece)) {
+        copy[r][c].color = "red";
+      } else if (!isWhite(oldPosition.piece) && copy[r][c].piece != null && isWhite(copy[r][c].piece)) {
+        copy[r][c].color = "red";
+      } else {
+        copy[r][c].color = "orange";
+      }
     });
 
     setBoard(copy);
@@ -107,6 +142,8 @@ function App() {
       SetPromotionSquares([]);
     }
     setBoard(copy);
+    setGameHistory((prev) => [...prev, copy]);
+    setPosition(position + 1);
   }, [promotionPiece]);
   return (
     <>
