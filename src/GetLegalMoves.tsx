@@ -27,15 +27,15 @@ function GetLegalMoves({
       square: square,
     });
   } else if (isBishop(piece)) {
-    moves = BishopMoves({ board: board, square: square });
+    moves = BishopMoves({ gameHistory: gameHistory,board: board, square: square });
   } else if (isRook(piece)) {
-    moves = RookMoves({ board: board, square: square });
+    moves = RookMoves({ gameHistory: gameHistory,board: board, square: square });
   } else if (isQueen(piece)) {
-    moves = QueenMoves({ board: board, square: square });
+    moves = QueenMoves({ gameHistory: gameHistory,board: board, square: square });
   } else if (isKnight(piece)) {
-    moves = KnightMoves({ board: board, square: square });
+    moves = KnightMoves({ gameHistory: gameHistory,board: board, square: square });
   } else if (isKing(piece)) {
-    moves = KingMoves({ board: board, square: square });
+    moves = KingMoves({ gameHistory: gameHistory,board: board, square: square });
   }
   // return moves.filter((item) => (item[0] <= 7 && item[0] >=0) && (item[1] <=7 && item[1] >=0));
   return moves;

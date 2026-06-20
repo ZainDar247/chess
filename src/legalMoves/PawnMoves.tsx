@@ -1,8 +1,7 @@
 import { Dialog, DialogContent } from "../components/ui/dialog";
 import { isWhite } from "../HelperFunctions";
 import type { chessSquare, promotionOptions } from "../types";
-//TODO: add isCapture with legal moves so that we can safely remove the pawn when doin en-passant
-//TODO: en-passant logic remaining
+
 export function PawnMoves({
   gameHistory,
   board,

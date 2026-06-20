@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { type chessSquare, type promotionOptions } from "./types";
 import { initialBoard, isWhite } from "./HelperFunctions";
 import GetLegalMoves from "./GetLegalMoves";
 import { PawnPromotion } from "./legalMoves/PawnMoves";
+import { ChessContext } from "./context";
 
-//TODO: pieces should not be allowed to move out of bounds
 function App() {
+  const {gameHistory, setGameHistory} = useContext(ChessContext);
   const [board, setBoard] = useState<chessSquare[][]>(() => initialBoard());
-  const [gameHistory, setGameHistory] = useState<chessSquare[][][]>([board]);
   const [position, setPosition] = useState<number>(0);
   const [selectedSquares, setSelectedSquares] = useState<chessSquare[]>([]);
   const [promotionSquares, SetPromotionSquares] = useState<chessSquare[]>([]);
@@ -27,14 +27,6 @@ function App() {
         setHighLightedSquares([]);
         setSelectedSquares([]);
       } else {
-        console.log(selectedSquares[0]);
-        console.log(
-          GetLegalMoves({
-            gameHistory: gameHistory,
-            board: board,
-            square: selectedSquares[0],
-          }),
-        );
         setHighLightedSquares(
           GetLegalMoves({
             gameHistory: gameHistory,
@@ -54,8 +46,6 @@ function App() {
           legalMove = true;
         }
       });
-
-      console.log(highLightedSquares);
 
       if (legalMove) {
         if (oldPosition.piece == "wP" && newPosition.row == 0) {
