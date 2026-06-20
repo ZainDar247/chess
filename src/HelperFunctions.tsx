@@ -58,5 +58,33 @@ export function createBoard (){
 
 
   export function isWhite(piece:string) : boolean{
-   return piece.includes("w");
+   return piece == null ? false : piece.includes("w");
+  }
+
+  export function isBlack(piece:string) : boolean{
+   return piece == null ? false : piece.includes("b");
+  }
+
+  export function isPawn(piece:string) : boolean{
+    return piece == null ? false : piece.includes("P");
+  }
+
+  export function isRook(piece:string) : boolean{
+    return piece == null ? false : piece.includes("R");
+  }
+
+  export function isKnight(piece:string) : boolean{
+    return piece == null ? false : piece.includes("N")
+  }
+
+  export function isBishop(piece:string) : boolean{
+    return piece == null ? false : piece.includes("B");
+  }
+
+  export function isKing(piece:string) : boolean{
+    return piece == null ? false : piece.includes("K");
+  }
+
+  export function isQueen(piece:string) : boolean{
+    return piece == null ? false : piece.includes("Q");
   }

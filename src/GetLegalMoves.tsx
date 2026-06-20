@@ -1,4 +1,7 @@
+import { isBishop, isKing, isKnight, isPawn, isQueen, isRook } from "./HelperFunctions";
 import BishopMoves from "./legalMoves/BishopMoves";
+import KingMoves from "./legalMoves/KingMoves";
+import KnightMoves from "./legalMoves/KnightMoves";
 import { PawnMoves } from "./legalMoves/PawnMoves";
 import QueenMoves from "./legalMoves/QueenMoves";
 import RookMoves from "./legalMoves/RookMoves";
@@ -16,18 +19,23 @@ function GetLegalMoves({
   square: chessSquare;
 }) {
   let moves: [number, number][] = [];
-  if (square.piece == "bP" || square.piece == "wP") {
+  const piece = square.piece;
+  if (isPawn(piece)) {
     moves = PawnMoves({
       gameHistory: gameHistory,
       board: board,
       square: square,
     });
-  } else if (square.piece == "bB" || square.piece == "wB") {
+  } else if (isBishop(piece)) {
     moves = BishopMoves({ board: board, square: square });
-  } else if (square.piece == "bR" || square.piece == "wR") {
+  } else if (isRook(piece)) {
     moves = RookMoves({ board: board, square: square });
-  } else if (square.piece == "bQ" || square.piece == "wQ") {
+  } else if (isQueen(piece)) {
     moves = QueenMoves({ board: board, square: square });
+  } else if (isKnight(piece)) {
+    moves = KnightMoves({ board: board, square: square });
+  } else if (isKing(piece)) {
+    moves = KingMoves({ board: board, square: square });
   }
   // return moves.filter((item) => (item[0] <= 7 && item[0] >=0) && (item[1] <=7 && item[1] >=0));
   return moves;
