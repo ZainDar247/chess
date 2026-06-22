@@ -1,17 +1,17 @@
+import KingInCheck from "../KingInCheck";
 import {
+  isBlack,
   moveBottom,
   moveLeft,
   moveRight,
-  moveTop
+  moveTop,
 } from "../HelperFunctions";
 import type { chessSquare } from "../types";
 
-function RookMoves({
+export function RookMoves({
   board,
   square,
-  gameHistory,
 }: {
-  gameHistory: chessSquare[][][];
   board: chessSquare[][];
   square: chessSquare;
 }) {
@@ -21,8 +21,33 @@ function RookMoves({
   moves.push(...moveBottom(board, square));
   moves.push(...moveLeft(board, square));
   moves.push(...moveRight(board, square));
-  
-  return moves;
+
+  if (isBlack(square.piece)) {
+    return moves.filter(
+      (item) =>
+        !KingInCheck("b", [square.row, square.col], [item[0], item[1]], board),
+    );
+  } else {
+    return moves.filter(
+      (item) =>
+        !KingInCheck("w", [square.row, square.col], [item[0], item[1]], board),
+    );
+  }
 }
 
-export default RookMoves;
+export function RookAttackSquares({
+  board,
+  square,
+}: {
+  board: chessSquare[][];
+  square: chessSquare;
+}) {
+  const moves: [number, number][] = [];
+
+  moves.push(...moveTop(board, square));
+  moves.push(...moveBottom(board, square));
+  moves.push(...moveLeft(board, square));
+  moves.push(...moveRight(board, square));
+
+  return moves;
+}

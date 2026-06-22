@@ -1,15 +1,13 @@
-import GetLegalMoves from "./GetLegalMoves";
+import { GetAttackedSquares } from "./GetAttackedSquares";
 import { isBlack, isWhite } from "./HelperFunctions";
 import type { chessSquare } from "./types";
 
-export function GetAllAvailableMoves({
+export function GetAllAttackedSquares({
   board,
   color,
-  gameHistory
 }: {
   board: chessSquare[][];
   color: "w" | "b";
-  gameHistory: chessSquare[][][]
 }) {
 
   const moves: [number, number][] = [];
@@ -18,8 +16,7 @@ export function GetAllAvailableMoves({
       if (color == "b") {
         if (isBlack(board[i][j].piece)) {
           moves.push(
-            ...GetLegalMoves({
-              gameHistory: gameHistory,
+            ...GetAttackedSquares({
               board: board,
               square: board[i][j],
             }),
@@ -29,8 +26,7 @@ export function GetAllAvailableMoves({
       if (color == "w") {
         if (isWhite(board[i][j].piece)) {
           moves.push(
-            ...GetLegalMoves({
-              gameHistory: gameHistory,
+            ...GetAttackedSquares({
               board: board,
               square: board[i][j],
             }),

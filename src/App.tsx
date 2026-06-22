@@ -1,13 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import { type chessSquare, type promotionOptions } from "./types";
-import { initialBoard, isWhite } from "./HelperFunctions";
+import { useEffect, useState } from "react";
 import GetLegalMoves from "./GetLegalMoves";
+import { initialBoard, isWhite } from "./HelperFunctions";
 import { PawnPromotion } from "./legalMoves/PawnMoves";
-import { ChessContext } from "./context";
+import { type chessSquare, type promotionOptions } from "./types";
 
 function App() {
-  const {gameHistory, setGameHistory} = useContext(ChessContext);
   const [board, setBoard] = useState<chessSquare[][]>(() => initialBoard());
+  const [gameHistory, setGameHistory] = useState<chessSquare[][][]>([board]);
   const [position, setPosition] = useState<number>(0);
   const [selectedSquares, setSelectedSquares] = useState<chessSquare[]>([]);
   const [promotionSquares, SetPromotionSquares] = useState<chessSquare[]>([]);
