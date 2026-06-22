@@ -3,6 +3,7 @@ import { Dialog, DialogContent } from "../components/ui/dialog";
 import { isBlack, isWhite } from "../HelperFunctions";
 import type { chessSquare, promotionOptions } from "../types";
 
+//when pawn takes , the pawn behind it disappears
 export function PawnMoves({
   gameHistory,
   board,
