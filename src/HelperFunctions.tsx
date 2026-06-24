@@ -10,6 +10,7 @@ export function createBoard() {
         col: col,
         color: (row + col) % 2 === 0 ? "white" : "brown",
         piece: null,
+        isenpassant: false,
       });
     }
   }
@@ -29,13 +30,13 @@ export function initialBoard() {
   return loadPosition(
     base,
     "rnbqkbnr" +
-      "pppppppp" +
-      "........" +
-      "........" +
-      "........" +
-      "........" +
-      "PPPPPPPP" +
-      "RNBQKBNR",
+    "pppppppp" +
+    "........" +
+    "........" +
+    "........" +
+    "........" +
+    "PPPPPPPP" +
+    "RNBQKBNR",
   );
 }
 
@@ -56,40 +57,40 @@ function loadPosition(board: chessSquare[][], position: string) {
   return copy;
 }
 
-export function isWhite(piece: string): boolean {
+export function isWhite(piece: string | null): boolean {
   return piece == null ? false : piece.includes("w");
 }
 
-export function isBlack(piece: string): boolean {
+export function isBlack(piece: string | null): boolean {
   return piece == null ? false : piece.includes("b");
 }
 
-export function isPawn(piece: string): boolean {
+export function isPawn(piece: string | null): boolean {
   return piece == null ? false : piece.includes("P");
 }
 
-export function isRook(piece: string): boolean {
+export function isRook(piece: string | null): boolean {
   return piece == null ? false : piece.includes("R");
 }
 
-export function isKnight(piece: string): boolean {
+export function isKnight(piece: string | null): boolean {
   return piece == null ? false : piece.includes("N");
 }
 
-export function isBishop(piece: string): boolean {
+export function isBishop(piece: string | null): boolean {
   return piece == null ? false : piece.includes("B");
 }
 
-export function isKing(piece: string): boolean {
+export function isKing(piece: string | null): boolean {
   return piece == null ? false : piece.includes("K");
 }
 
-export function isQueen(piece: string): boolean {
+export function isQueen(piece: string | null): boolean {
   return piece == null ? false : piece.includes("Q");
 }
 
 export function kingPosition(board: chessSquare[][], color: "w" | "b") {
-  let position: [number, number] = null;
+  let position: [number, number];
 
   for (let i = 0; i <= 7; i++) {
     for (let j = 0; j <= 7; j++) {
@@ -415,7 +416,7 @@ export function moveInLShape(
   moves.push([square.row + 1, square.col + 2]);
   moves.push([square.row + 2, square.col - 1]);
   moves.push([square.row + 2, square.col + 1]);
- 
+
 
   if (isBlack(square.piece)) {
     return moves.filter(

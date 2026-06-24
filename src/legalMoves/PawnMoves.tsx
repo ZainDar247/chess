@@ -28,6 +28,7 @@ export function PawnMoves({
         ) {
           //check if pawn moved 2 squares at once and in previous turn it was on home rank (right pawn)
           moves.push([square.row + 1, square.col + 1]);
+          board[square.row + 1][square.col + 1].isenpassant = true
         }
       }
       if (square.col > 0 && board[square.row][square.col - 1].piece == "wP") {
@@ -41,6 +42,7 @@ export function PawnMoves({
         ) {
           //check if pawn moved 2 squares at once and in previous turn it was on home rank (left pawn)
           moves.push([square.row + 1, square.col - 1]);
+          board[square.row + 1][square.col - 1].isenpassant = true
         }
       }
     }
@@ -85,6 +87,7 @@ export function PawnMoves({
         ) {
           //check if pawn moved 2 squares at once and in previous turn it was on home rank (right pawn)
           moves.push([square.row - 1, square.col + 1]);
+          board[square.row - 1][square.col + 1].isenpassant = true
         }
       }
       if (square.col > 0 && board[square.row][square.col - 1].piece == "bP") {
@@ -98,6 +101,7 @@ export function PawnMoves({
         ) {
           //check if pawn moved 2 squares at once and in previous turn it was on home rank (left pawn)
           moves.push([square.row - 1, square.col - 1]);
+          board[square.row - 1][square.col - 1].isenpassant = true
         }
       }
     }
@@ -195,14 +199,14 @@ export function PawnAttackSquares({
     moves.push([square.row + 1, square.col + 1]);
     return moves.filter(
       (item) =>
-        item[1] <= 7 && item[1] >= 0 && isWhite(board[item[0]][item[1]].piece),
+        item[1] <= 7 && item[1] >= 0 && (isWhite(board[item[0]][item[1]].piece) || board[item[0]][item[1]].piece == null),
     );
   } else {
-    moves.push([square.row + 1, square.col - 1]);
-    moves.push([square.row + 1, square.col + 1]);
+    moves.push([square.row - 1, square.col - 1]);
+    moves.push([square.row - 1, square.col + 1]);
     return moves.filter(
       (item) =>
-        item[1] <= 7 && item[1] >= 0 && isBlack(board[item[0]][item[1]].piece),
+        item[1] <= 7 && item[1] >= 0 && (isBlack(board[item[0]][item[1]].piece) || board[item[0]][item[1]].piece == null),
     );
   }
 }

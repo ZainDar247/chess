@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import GetLegalMoves from "./GetLegalMoves";
-import { initialBoard, isWhite } from "./HelperFunctions";
+import { initialBoard, isBlack, isWhite } from "./HelperFunctions";
 import { PawnPromotion } from "./legalMoves/PawnMoves";
 import { type chessSquare, type promotionOptions } from "./types";
-
+//Implement Castling
 function App() {
   const [board, setBoard] = useState<chessSquare[][]>(() => initialBoard());
   const [gameHistory, setGameHistory] = useState<chessSquare[][][]>([board]);
   const [position, setPosition] = useState<number>(0);
+  const [turn, setTurn] = useState<"w" | "b">("w");
   const [selectedSquares, setSelectedSquares] = useState<chessSquare[]>([]);
   const [promotionSquares, SetPromotionSquares] = useState<chessSquare[]>([]);
   const [highLightedSquares, setHighLightedSquares] = useState<
@@ -26,13 +27,24 @@ function App() {
         setHighLightedSquares([]);
         setSelectedSquares([]);
       } else {
-        setHighLightedSquares(
-          GetLegalMoves({
-            gameHistory: gameHistory,
-            board: board,
-            square: selectedSquares[0],
-          }),
-        );
+        if (turn == "w" && isWhite(selectedSquares[0].piece)) {
+          setHighLightedSquares(
+            GetLegalMoves({
+              gameHistory: gameHistory,
+              board: board,
+              square: selectedSquares[0],
+            }),
+          );
+        }
+        if (turn == "b" && isBlack(selectedSquares[0].piece)) {
+          setHighLightedSquares(
+            GetLegalMoves({
+              gameHistory: gameHistory,
+              board: board,
+              square: selectedSquares[0],
+            }),
+          );
+        }
       }
     } else if (selectedSquares?.length > 1) {
       const copy = board.map((row) => row.map((cell) => ({ ...cell })));
@@ -56,20 +68,34 @@ function App() {
           setOpen(true);
           SetPromotionSquares(selectedSquares);
         } else {
+          // if (oldPosition.piece == "wP") {
+          //   if (
+          //     newPosition.row == oldPosition.row - 1 &&
+          //     (newPosition.col == oldPosition.col - 1 ||
+          //       newPosition.col == oldPosition.col + 1)
+          //   ) {
+          //     copy[newPosition.row + 1][newPosition.col].piece = null;
+          //   }
+          // } else if (oldPosition.piece == "bP") {
+          //   if (
+          //     newPosition.row == oldPosition.row + 1 &&
+          //     (newPosition.col == oldPosition.col - 1 ||
+          //       newPosition.col == oldPosition.col + 1)
+          //   ) {
+          //     copy[newPosition.row - 1][newPosition.col].piece = null;
+          //   }
+          // }
+          console.log(oldPosition.piece);
           if (oldPosition.piece == "wP") {
-            if (
-              newPosition.row == oldPosition.row - 1 &&
-              (newPosition.col == oldPosition.col - 1 ||
-                newPosition.col == oldPosition.col + 1)
-            ) {
+            if (newPosition.isenpassant) {
+              console.log(newPosition.isenpassant)
+              console.log(copy[newPosition.row + 1][newPosition.col].piece)
               copy[newPosition.row + 1][newPosition.col].piece = null;
             }
           } else if (oldPosition.piece == "bP") {
-            if (
-              newPosition.row == oldPosition.row + 1 &&
-              (newPosition.col == oldPosition.col - 1 ||
-                newPosition.col == oldPosition.col + 1)
-            ) {
+            if (newPosition.isenpassant) {
+              console.log(newPosition.isenpassant)
+              console.log(copy[newPosition.row - 1][newPosition.col].piece)
               copy[newPosition.row - 1][newPosition.col].piece = null;
             }
           }
@@ -79,6 +105,7 @@ function App() {
           setBoard(copy);
           setGameHistory((prev) => [...prev, copy]);
           setPosition(position + 1);
+          setTurn(turn == "w" ? "b" : "w");
         }
       }
       setHighLightedSquares([]);
