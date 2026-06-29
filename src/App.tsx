@@ -19,6 +19,23 @@ function App() {
   const [promotionColor, setPromotionColor] = useState<"w" | "b">("w");
   const [open, setOpen] = useState<boolean>(false);
 
+  const HandlePieceClick = (square: chessSquare) => {
+    if (selectedSquares?.length == 0) {
+      setSelectedSquares((prev) => [...prev, square]);
+    } else {
+      if (
+        (isBlack(selectedSquares[0].piece) && isBlack(square.piece)) ||
+        (isWhite(selectedSquares[0].piece) && isWhite(square.piece))
+      ) {
+        setSelectedSquares([square]);
+      }
+      else {
+        setSelectedSquares((prev) => [...prev, square]);
+      }
+    }
+    console.log(selectedSquares)
+  }
+
   useEffect(() => {
     if (selectedSquares.length == 0) return;
 
@@ -88,14 +105,14 @@ function App() {
           console.log(oldPosition.piece);
           if (oldPosition.piece == "wP") {
             if (newPosition.isenpassant) {
-              console.log(newPosition.isenpassant)
-              console.log(copy[newPosition.row + 1][newPosition.col].piece)
+              console.log(newPosition.isenpassant);
+              console.log(copy[newPosition.row + 1][newPosition.col].piece);
               copy[newPosition.row + 1][newPosition.col].piece = null;
             }
           } else if (oldPosition.piece == "bP") {
             if (newPosition.isenpassant) {
-              console.log(newPosition.isenpassant)
-              console.log(copy[newPosition.row - 1][newPosition.col].piece)
+              console.log(newPosition.isenpassant);
+              console.log(copy[newPosition.row - 1][newPosition.col].piece);
               copy[newPosition.row - 1][newPosition.col].piece = null;
             }
           }
@@ -134,9 +151,17 @@ function App() {
 
     highLightedSquares.forEach(([r, c]) => {
       const oldPosition = selectedSquares[0];
-      if (isWhite(oldPosition.piece) && copy[r][c].piece != null && !isWhite(copy[r][c].piece)) {
+      if (
+        isWhite(oldPosition.piece) &&
+        copy[r][c].piece != null &&
+        !isWhite(copy[r][c].piece)
+      ) {
         copy[r][c].color = "red";
-      } else if (!isWhite(oldPosition.piece) && copy[r][c].piece != null && isWhite(copy[r][c].piece)) {
+      } else if (
+        !isWhite(oldPosition.piece) &&
+        copy[r][c].piece != null &&
+        isWhite(copy[r][c].piece)
+      ) {
         copy[r][c].color = "red";
       } else {
         copy[r][c].color = "orange";
@@ -192,7 +217,7 @@ function App() {
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-                onClick={() => setSelectedSquares((prev) => [...prev, square])}
+                onClick={() => HandlePieceClick(square)}
               >
                 {square.piece && (
                   <img
